@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: 'Comic Sans MS', sans-serif;
+            height: 100vh;
+            display: flex;
+            overflow: hidden;
+            background-image: url('/static/images/BACKGROUND3.png'); /* Adjust path */
+            background-size: cover;
+            background-position: center;
+            color: #fff;
+    }
+
+    header {
+        position: fixed;
+        top: 0;
+        background-color: rgba(5, 21, 9, 0.1);
+        width: 100%;
+        padding: 1rem;
+        text-align: center;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    header img {
+        height: 50px;
+    }
+
+    .header-title {
+        font-size: 2.5rem;
+        flex-grow: 1;
+        text-align: center;
+    } 
+
+    .openbtn {
+        font-size: 20px;
+        cursor: pointer;
+        background-color: #111;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+    }
+
+    .openbtn:hover {
+        background-color: #444;
+    }
+
+    .sidebar {
+        height: 100%;
+        width: 0;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        background-color: #111;
+        overflow-x: hidden;
+        transition: 0.5s;
+        padding-top: 60px;
+    }
+
+    .sidebar a {
+        padding: 8px 8px 8px 32px;
+        text-decoration: none;
+        font-size: 25px;
+        color: #818181;
+        display: block;
+        transition: 0.3s;
+    }
+
+    .sidebar a:hover {
+        color: #f1f1f1;
+    }
+
+    .sidebar .closebtn {
+        position: absolute;
+        top: 0;
+        right: 25px;
+        font-size: 36px;
+        margin-left: 50px;
+    }
+
+    #main {
+        transition: margin-top .5s;
+        padding: 16px;
+        width: 100%;
+        margin-top: 100px;
+    }
+
+    main {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        width: 100%;
+        max-width: 1900px;
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 10px;
+    }
+
+    .form-row {
+        display: flex;
+        margin-bottom: 1rem;
+    }
+
+    .center-row {
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .right-align {
+        justify-content: flex-end;
+        flex-direction: row;
+        gap: 1rem;
+    }
+
+    .side-by-side {
+        justify-content: space-between;
+    }
+
+    .input-group {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        width: 30%;
+    }
+
+    .input-group label {
+        margin-bottom: 0.5rem;
+    }
+
+    .input-group input {
+        padding: 0.5rem;
+        margin-bottom: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        width: 100%;
+    }
+
+    .form-buttons {
+        display: flex;
+        justify-content: center;
+        margin-top: 1rem;
+    }
+
+    form button {
+        background: #308894;
+        color: #fff;
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: background 0.3s ease, transform 0.3s ease;
+        width: 48%;
+    }
+
+    form button:hover {
+        background: #475237;
+        transform: scale(1.05);
+        background: linear-gradient(45deg, #475237, #08202B);
+    }
+
+    .location-btn {
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        width: 30px; 
+        height: 30px;
+        padding: 0;
+        transition: transform 0.3s ease;
+    }
+
+    .location-btn:hover {
+        transform: rotate(20deg);
+    }
+
+    .city-input {
+        width: calc(100% - 40px);
+    }
+
+    .loading-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 999;
+    }
+
+    .loading-icon {
+        width: 50px;
+        height: 50px;
+        border: 5px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: #fff;
+        animation: spin 1s infinite linear;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    @media screen and (max-height: 450px) {
+        .sidebar {padding-top: 15px;}
+        .sidebar a {font-size: 18px;}
+    }
+</style>
+</head>
+<body>
+
+<!-- Loading Indicator -->
+<div class="loading-container" id="loadingContainer">
+    <div class="loading-icon"></div>
+</div>
+
+<!-- Sidebar -->
+<div id="mySidebar" class="sidebar">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+    <a href="/">Home</a>
+    <a href="/current_aqi">Current AQI</a>
+    
+</div>
+
+<!-- Page content -->
+<div id="main">
+    <header>
+        <button class="openbtn" onclick="openNav()">☰</button>
+        <img src="/static/images/R-1.png" alt="Logo" width="60px" height="20px">
+        <div class="header-title">Air Quality Index</div>
+    </header>
+
+    <main>
+        <form id="aqiForm" action="/predict" method="post" onsubmit="handleSubmit(event)">
+            <div class="form-row center-row">
+                <label for="city">City:</label>
+                <input type="text" name="city" id="city" readonly class="city-input">
+                <button type="button" class="location-btn" onclick="getLocation()">
+                    <img src="https://img.icons8.com/ios-filled/50/000000/marker.png" alt="Get Location" width="20px" height="20px">
+                </button>
+            </div>
+            <div class="form-row right-align">
+                <div class="input-group">
+                    <label for="latitude">Latitude:</label>
+                    <input type="text" name="latitude" id="latitude" readonly>
+                </div>
+                <div class="input-group">
+                    <label for="longitude">Longitude:</label>
+                    <input type="text" name="longitude" id="longitude" readonly>
+                </div>
+            </div>
+            <div class="form-row side-by-side">
+                <div class="input-group">
+                    <label for="PM2.5">PM2.5:</label>
+                    <input type="number" name="PM2.5" id="PM2.5" step="any" required>
+                </div>
+                <div class="input-group">
+                    <label for="PM10">PM10:</label>
+                    <input type="number" name="PM10" id="PM10" step="any" required>
+                </div>
+                <div class="input-group">
+                    <label for="O3">O3:</label>
+                    <input type="number" name="O3" id="O3" step="any" required>
+                </div>
+            </div>
+            <div class="form-row side-by-side">
+                <div class="input-group">
+                    <label for="NO2">NO2:</label>
+                    <input type="number" name="NO2" id="NO2" step="any" required>
+                </div>
+                <div class="input-group">
+                    <label for="SO2">SO2:</label>
+                    <input type="number" name="SO2" id="SO2" step="any" required>
+                </div>
+                <div class="input-group">
+                    <label for="CO">CO:</label>
+                    <input type="number" name="CO" id="CO" step="any" required>
+                </div>
+            </div>
+            <div class="form-row form-buttons">
+                <button type="submit">Predict AQI</button>
+            </div>
+        </form>
+    </main>
+</div>
+
+<script>
+function openNav() {
+    document.getElementById("mySidebar").style.width = "250px";
+    document.getElementById("main").style.marginLeft = "250px";
+}
+
+function closeNav() {
+    document.getElementById("mySidebar").style.width = "0";
+    document.getElementById("main").style.marginLeft= "0";
+}
+
+function getLocation() {
+    // Functionality to get user's current location, if needed.
+    alert("Location functionality not implemented in this example.");
+}
+
+function handleSubmit(event) {
+    event.preventDefault(); // Prevent default form submission
+    
+    // Display loading indicator
+    document.getElementById("loadingContainer").style.display = "flex";
+    
+    // Simulate delay before form submission
+    setTimeout(function() {
+        // Submit the form programmatically after delay
+        document.getElementById("aqiForm").submit();
+    }, 2000); // Adjust delay time (in milliseconds) as needed
+}
+</script>
+<script src="/static/script.js"></script>
+</body>
+</html>

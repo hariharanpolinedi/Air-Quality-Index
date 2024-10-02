@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speedometer Result</title>
+    <style>
+        .gauge {
+            width: 300px;
+            height: 150px;
+            position: relative;
+            background: linear-gradient(to right, #00FF00, #FFFF00, #FF0000);
+            border-top-left-radius: 150px;
+            border-top-right-radius: 150px;
+            margin: 50px auto;
+        }
+
+        .needle {
+            width: 2px;
+            height: 150px;
+            background: #000;
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform-origin: bottom;
+            transform: rotate(0deg);
+            transition: transform 2s ease-out;
+        }
+
+        .gauge-label {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+    <div class="gauge">
+        <div id="needle" class="needle"></div>
+    </div>
+    <div class="gauge-label">
+        <span id="gauge-value">0</span>
+    </div>
+
+    <script>
+        function updateGauge(value) {
+            const needle = document.getElementById('needle');
+            const gaugeValue = document.getElementById('gauge-value');
+
+            // Convert the value to degrees (0 to 180)
+            const degrees = value * 1.8;
+
+            // Animate the needle position
+            needle.style.transform = `rotate(${degrees}deg)`;
+
+            // Update the displayed value
+            let currentValue = 0;
+            const increment = value / 100; // Increment value to animate
+
+            const animateValue = setInterval(() => {
+                currentValue += increment;
+                if (currentValue >= value) {
+                    currentValue = value;
+                    clearInterval(animateValue);
+                }
+                gaugeValue.textContent = Math.round(currentValue);
+            }, 20);
+        }
+
+        // Get the value from the URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const resultValue = parseInt(urlParams.get('value'), 10);
+
+        if (!isNaN(resultValue)) {
+            updateGauge(resultValue);
+        } else {
+            alert('Invalid value provided.');
+        }
+    </script>
+</body>
+</html>

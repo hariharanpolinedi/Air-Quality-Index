@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AQI Prediction</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Comic Sans MS', sans-serif;
+            height: 100vh;
+            display: flex;
+            overflow: hidden;
+            background-image: url('/static/images/BACKGROUND1.png'); /* Adjust path */
+            background-size: cover;
+            background-position: center;
+        }
+        .container {
+            display: flex;
+            flex: 1;
+        }
+        .left-side, .right-side {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .logo {
+            max-width: 100%;
+            max-height: 100%;
+        }
+        .right-side {
+            padding: 20px;
+        }
+        .button {
+            background: linear-gradient(45deg, #111B13, #103648); /* Gradient from dark green to dark blue */
+            color: #fff;
+            padding: 15px 25px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 10px 0;   
+            width: 80%;
+            text-align: center;
+            font-size: 18px;
+            transition: transform 0.3s, background 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .button:hover {
+            background: linear-gradient(45deg, #3a7bd5, #d7dfe0); /* Gradient on hover */
+            transform: scale(1.1);
+        }
+        .button img {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="left-side">
+            <img src="{{ url_for('static', filename='images/LG.png') }}" alt="Logo" class="logo">
+        </div>
+        <div class="right-side">
+            <a href="/current_aqi" class="button">
+                <img src="https://img.icons8.com/ios-filled/50/ffffff/air-quality.png" alt="Current AQI Icon" width="30" height="30">
+                Current AQI
+            </a>
+        </div>
+    </div>
+</body>
+</html>
